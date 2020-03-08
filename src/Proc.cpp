@@ -13,19 +13,28 @@ int main() {
 	int x2;
 	int y1;
 	int y2;
-	char l;
+	int r1;
+	char c;
 	cin >> n;
 	Proc p;
 	for (int i = 0; i < n; i++) {
-		cin >> l >> x1 >> y1 >> x2 >> y2;
-		Line line(x1, y1, x2, y2, i);
-		p.preProc(line);
+		cin >> c;
+		if (c == 'L') {
+			cin >> x1 >> y1 >> x2 >> y2;
+			Line line(x1, y1, x2, y2, i);
+			p.preProcLine(line);
+		}
+		else if (c == 'C') {
+			cin >> x1 >> y1 >> r1;
+			Circle circle(x1, y1, r1, i);
+			p.addCircle(circle);
+		}
 	}
 	int result = p.calcPoint();
 	cout << result << endl;
 }
 
-void Proc::preProc(Line line) {
+void Proc::preProcLine(Line line) {
 	map<double, set<Line>>::iterator iter;
 	iter = preMap.find(line.getK());
 	if (iter != preMap.end()) {
@@ -40,8 +49,13 @@ void Proc::preProc(Line line) {
 	}
 }
 
+void Proc::addCircle(Circle circle) {
+	circleSet.insert(circle);
+}
+
 int Proc::calcPoint() {
 	lineAndLine();
+	calcCircle();
 	return pointSet.size();
 }
 
@@ -83,6 +97,41 @@ void Proc::lineAndLine() {
 		}
 		for (iterS = tempSet.begin(); iterS != tempSet.end(); iterS++) {
 			lineSet.insert(*iterS);
+		}
+	}
+}
+
+void Proc::calcCircle() {
+	set<Circle>::iterator iter1;
+	for (iter1 = circleSet.begin(); iter1 != circleSet.end(); iter1++) {
+		set<Circle>::iterator iter2;
+		Circle circle1 = *iter1;
+		lineAndCircle(circle1);
+		for (iter2 = circleSet.begin(); iter2 != iter1; iter2++) {
+			Circle circle2 = *iter2;
+			set<Point> s = circle1.withCircle(circle2);
+			set<Point>::iterator iterS;
+			for (iterS = s.begin(); iterS != s.end(); iterS++) {
+				pointSet.insert(*iterS);
+			}
+		}
+	}
+}
+
+void Proc::lineAndCircle(Circle circle) {
+	set<Point> result;
+	map<double, set<Line>>::iterator iterM;
+	for (iterM = preMap.begin(); iterM != preMap.end(); iterM++) {
+		set<Line>::iterator iterS;
+		set<Line> tempSet = iterM->second;
+		//for (iterS = tempSet.begin(); iterS != iterM->second.end(); iterS++)
+		for (iterS = tempSet.begin(); iterS != tempSet.end(); iterS++) {
+			Line l = *iterS;
+			set<Point> s = circle.withLine(l);
+			set<Point>::iterator iterS;
+			for (iterS = s.begin(); iterS != s.end(); iterS++) {
+				pointSet.insert(*iterS);
+			}
 		}
 	}
 }

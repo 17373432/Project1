@@ -5,6 +5,12 @@ Point::Point(double px, double py) {
 	y = py;
 }
 
+Point::Point() {
+	x = 0;
+	y = 0;
+}
+
+
 void Point::addLine(int lineId) {
 	locateLines.insert(lineId);
 }
@@ -24,4 +30,12 @@ bool Point::operator < (const Point right)const {
 		}
 	}
 	return result;
+}
+
+double Point::getX() {
+	return x;
+}
+
+double Point::getY() {
+	return y;
 }
