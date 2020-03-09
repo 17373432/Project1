@@ -11,6 +11,39 @@ Proc::Proc() {
 }
 
 int main(int argc, char* argv[]) {
+	int result = 0;
+	ifstream in;
+	ofstream out;
+	if (argc != 5) {
+		cout << "Wrong Format!" << endl;
+		exit(0);
+	}
+	if (strcmp(argv[1], "-i") == 0 && strcmp(argv[3], "-o") == 0) {
+		in.open(argv[2]);
+		out.open(argv[4]);
+	}
+	else if (strcmp(argv[3], "-i") == 0 && strcmp(argv[1], "-o") == 0) {
+		in.open(argv[4]);
+		out.open(argv[2]);
+	}
+	else {
+		cout << "Wrong Format!" << endl;
+		exit(0);
+	}
+
+	if (!in) {
+		cout << "Input File Wrong!\n";
+		exit(0);
+	}
+
+	Proc p;
+	result = p.process(in);
+	out << result << endl;
+	in.close();
+	out.close();
+}
+
+int Proc::process(ifstream& in) {
 	int n;
 	int x1 = 0;
 	int x2 = 0;
@@ -18,27 +51,38 @@ int main(int argc, char* argv[]) {
 	int y2 = 0;
 	int r1 = 0;
 	char c = '\0';
-	ifstream in(argv[2]);
-	ofstream out(argv[4]);
+
 	in >> n;
-	Proc p;
 	for (int i = 0; i < n; i++) {
 		in >> c;
 		if (c == 'L') {
 			in >> x1 >> y1 >> x2 >> y2;
 			Line line(x1, y1, x2, y2, i);
-			p.preProcLine(line);
+			preProcLine(line);
 		}
 		else if (c == 'C') {
 			in >> x1 >> y1 >> r1;
 			Circle circle(x1, y1, r1, i);
-			p.addCircle(circle);
+			addCircle(circle);
 		}
 	}
-	int result = p.calcPoint();
-	out << result << endl;
-	in.close();
-	out.close();
+	int result = calcPoint();
+	/*
+	ofstream fout("cc.txt");
+	set<Point>::iterator iter;
+	for (iter = pointSet.begin(); iter != pointSet.end(); ++iter) {
+		Point p;
+		p = *iter;
+		if (p.getX() > 32293000000 && p.getX() < 32293400000) {
+			vector<int> v = p.getLines();
+			for (int i = 0; i < v.size(); i++) {
+				cout << v[i] << endl;
+			}
+		}
+		//fout << p.getX() << " " << p.getY() << endl;
+	}
+	*/
+	return result;
 }
 
 void Proc::preProcLine(Line line) {
@@ -80,6 +124,7 @@ void Proc::lineAndLine() {
 				if (find(inteId.begin(), inteId.end(), l2.getId()) != inteId.end()) {
 					continue;
 				}
+
 				Point p = l1.withLine(l2);
 				set<Point>::iterator iterP = pointSet.find(p);
 				//找到就把点上的线全加进去
@@ -96,6 +141,7 @@ void Proc::lineAndLine() {
 					p.addLine(l1.getId());
 					p.addLine(l2.getId());
 					pointSet.insert(p);
+
 				}
 			}
 		}
@@ -103,6 +149,7 @@ void Proc::lineAndLine() {
 			lineSet.push_back(*iterS);
 		}
 	}
+
 }
 
 void Proc::calcCircle() {

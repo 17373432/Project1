@@ -2,7 +2,7 @@
 #include <map>
 #include <set>
 #include <vector>
-
+#include <fstream>
 
 #define eps 0.00000000001
 #define inf 1000000
@@ -161,6 +161,7 @@ private:
 	vector<Circle> circleSet;
 public:
 	Proc();
+	int process(ifstream& in);
 	void preProcLine(Line line);
 	int calcPoint();
 	void lineAndLine();
