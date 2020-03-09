@@ -50,6 +50,7 @@ vector<Point> Circle::withCircle(Circle that) {
 	}
 
 	return s;
+
 }
 
 Circle::Circle() {
