@@ -1,25 +1,66 @@
 ﻿#pragma once
 #include <map>
 #include <set>
+#include <vector>
+
 
 #define eps 0.00000000001
 #define inf 1000000
 
 using namespace std;
 
+inline bool dEqual(double x, double y) {
+	double temp = 0;
+	bool result = false;
+	temp = x - y;
+	if (temp < 0) {
+		temp = -temp;
+	}
+	if (temp < eps) {
+		result = true;
+	}
+	return result;
+}
+
 class Point {
 private:
 	double x;
 	double y;
-	set<int> locateLines;
+	vector<int> locateLines;
 public:
 	Point(double px, double py);
 	Point();
-	void addLine(int lineId);
-	set<int> getLines();
-	bool operator < (const Point right)const;
-	double getX();
-	double getY();
+	void addLine(int lineId) {
+		locateLines.push_back(lineId);
+	}
+	inline vector<int> getLines() {
+		return locateLines;
+	}
+	inline bool operator < (const Point right)const {
+		bool result = false;
+		if (x < right.x) {
+			result = true;
+		}
+		else if (dEqual(x, right.x)) {
+			if (y < right.y) {
+				result = true;
+			}
+		}
+		return result;
+	}
+	inline bool operator == (const Point right)const {
+		bool result = false;
+		if (dEqual(x, right.x) && dEqual(y, right.y)) {
+			result = true;
+		}
+		return result;
+	}
+	inline double getX() {
+		return x;
+	}
+	inline double getY() {
+		return y;
+	}
 };
 
 class Line {
@@ -39,26 +80,56 @@ private:
 	double cos;
 	double sin;
 
-	void pro();
+	void pro() noexcept;
 public:
 	Line(int x1, int y1, int x2, int y2, int no);
 	Line(double A, double B, double C);
-	bool operator < (const Line right)const;
-	double getK();
-	double getA();
-	double getB();
-	double getC();
-	int getId();
+	Line();
+	bool operator < (const Line right)const {
+		return id < right.id;
+	}
+	inline double getK() {
+		return k;
+	}
+	inline double getA() {
+		return a;
+	}
+	inline double getB() {
+		return b;
+	}
+	inline double getC() {
+		return c;
+	}
+	inline int getId() {
+		return id;
+	}
+
 	Point withLine(Line l);
 
-	double geta2Ab2();
-	double getb2();
-	double getab();
-	double getac();
-	double geta2();
-	double getbc();
-	double getCos();
-	double getSin();
+	inline double geta2Ab2() {
+		return a2Ab2;
+	}
+	inline double getb2() {
+		return b2;
+	}
+	inline double getab() {
+		return ab;
+	}
+	inline double getac() {
+		return ac;
+	}
+	inline double geta2() {
+		return a2;
+	}
+	inline double getbc() {
+		return bc;
+	}
+	inline double getCos() {
+		return cos;
+	}
+	inline double getSin() {
+		return sin;
+	}
 };
 
 class Circle {
@@ -73,27 +144,29 @@ private:
 	double x2Ay2Sr2;
 public:
 	Circle(int cx, int cy, int cr, int no);
-	set<Point> withLine(Line l);
-	set<Point> withCircle(Circle that);
-	bool operator < (const Circle right)const;
+	Circle();
+	vector<Point> withLine(Line l);
+	vector<Point> withCircle(Circle that);
+	inline bool operator < (const Circle right)const {
+		return id < right.id;
+	}
 };
 
 class Proc {
 private:
-	map<double, set<Line>> preMap;
+	map<double, vector<Line>> preMap;
 	set<Point> pointSet;
-	set<Line> lineSet;
-	set<Circle> circleSet;
+	int num;
+	vector<Line> lineSet;
+	vector<Circle> circleSet;
 public:
 	Proc();
 	void preProcLine(Line line);
 	int calcPoint();
 	void lineAndLine();
-	void addCircle(Circle circle);
+	void addCircle(Circle circle) {
+		circleSet.push_back(circle);
+	}
 	void calcCircle();
 	void lineAndCircle(Circle circle);
 };
-
-
-
-bool dEqual(double x, double y);

@@ -2,9 +2,9 @@
 
 
 Line::Line(int x1, int y1, int x2, int y2, int no) {
-	a = (double)y2 - (double)y1;
-	b = (double)x1 - (double)x2;
-	c = (double)x2 * (double)y1 - (double)x1 * (double)y2;
+	a = static_cast<double>(y2) - static_cast<double>(y1);
+	b = static_cast<double>(x1) - static_cast<double>(x2);
+	c = static_cast<double>(x2)* static_cast<double>(y1) - static_cast<double>(x1)* static_cast<double>(y2);
 	id = no;
 	pro();
 }
@@ -17,7 +17,7 @@ Line::Line(double A, double B, double C) {
 	pro();
 }
 
-void Line::pro() {
+void Line::pro() noexcept {
 	if (dEqual(b, 0)) {
 		k = inf;
 	}
@@ -36,31 +36,8 @@ void Line::pro() {
 }
 
 
-bool Line::operator <(const Line right)const {
-	return id < right.id;
-}
-
-double Line::getA() {
-	return a;
-}
-
-double Line::getB() {
-	return b;
-}
-
-double Line::getC() {
-	return c;
-}
-double Line::getK() {
-	return k;
-}
-
-int Line::getId() {
-	return id;
-}
-
 Point Line::withLine(Line l) {
-	double a2 = l.getA();
+	const double a2 = l.getA();
 	double b2 = l.getB();
 	double c2 = l.getC();
 	//a2*b!=a*b2
@@ -71,34 +48,7 @@ Point Line::withLine(Line l) {
 	return p;
 }
 
-double Line::geta2Ab2() {
-	return a2Ab2;
-}
-
-double Line::getb2() {
-	return b2;
-}
-
-double Line::getab() {
-	return ab;
-}
-
-double Line::getac() {
-	return ac;
-}
-
-double Line::geta2() {
-	return a2;
-}
-
-double Line::getbc() {
-	return bc;
-}
-
-double Line::getCos() {
-	return cos;
-}
-
-double Line::getSin() {
-	return sin;
+Line::Line() {
+	a = b = c = id = 0;
+	pro();
 }
