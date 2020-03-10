@@ -39,8 +39,8 @@ int main(int argc, char* argv[]) {
 	Proc p;
 	result = p.process(in);
 	out << result << endl;
-	in.close();
-	out.close();
+
+	exit(0);
 }
 
 int Proc::process(ifstream& in) {
@@ -117,11 +117,12 @@ void Proc::lineAndLine() {
 			vector<Line>::iterator iterL;
 			Line l1 = *iterS;
 			//set or vector?
-			vector<int> inteId;
+			set<int> inteId;
 			for (iterL = lineSet.begin(); iterL != lineSet.end(); iterL++) {
 				Line l2 = *iterL;
 				//if find, it is useless to calculate the intersection
-				if (find(inteId.begin(), inteId.end(), l2.getId()) != inteId.end()) {
+				set<int>::iterator iterI = inteId.find(l2.getId());
+				if (iterI != inteId.end()) {
 					continue;
 				}
 
@@ -130,11 +131,8 @@ void Proc::lineAndLine() {
 				//找到就把点上的线全加进去
 				if (iterP != pointSet.end()) {
 					p = *iterP;
-					vector<int>::iterator iterpl;
 					vector<int> temp = p.getLines();
-					for (iterpl = temp.begin(); iterpl != temp.end(); iterpl++) {
-						inteId.push_back(*iterpl);
-					}
+					inteId.insert(temp.begin(), temp.end());
 					p.addLine(l1.getId());
 				}
 				else {
@@ -145,9 +143,8 @@ void Proc::lineAndLine() {
 				}
 			}
 		}
-		for (iterS = tempSet.begin(); iterS != tempSet.end(); iterS++) {
-			lineSet.push_back(*iterS);
-		}
+
+		lineSet.insert(lineSet.end(), tempSet.begin(), tempSet.end());
 	}
 
 }
