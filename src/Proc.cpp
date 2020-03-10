@@ -2,6 +2,7 @@
 #include <fstream>
 #include <set>
 #include <map>
+#include <unordered_set>
 #include "Project1.h"
 
 using namespace std;
@@ -127,7 +128,9 @@ void Proc::lineAndLine() {
 				}
 
 				Point p = l1.withLine(l2);
-				set<Point>::iterator iterP = pointSet.find(p);
+
+				//set<Point>::iterator iterP = pointSet.find(p);
+				unordered_set<Point, hashPoint>::iterator iterP = pointSet.find(p);
 				//找到就把点上的线全加进去
 				if (iterP != pointSet.end()) {
 					p = *iterP;

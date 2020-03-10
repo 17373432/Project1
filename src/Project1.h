@@ -3,6 +3,8 @@
 #include <set>
 #include <vector>
 #include <fstream>
+#include <unordered_set>
+#include <math.h>
 
 #define eps 0.00000000001
 #define inf 1000000
@@ -24,10 +26,11 @@ inline bool dEqual(double x, double y) {
 
 class Point {
 private:
-	double x;
-	double y;
+
 	vector<int> locateLines;
 public:
+	double x;
+	double y;
 	Point(double px, double py);
 	Point();
 	void addLine(int lineId) {
@@ -61,7 +64,16 @@ public:
 	inline double getY() {
 		return y;
 	}
+
 };
+
+class hashPoint {
+public:
+	std::size_t operator()(const Point& p) const {
+		return (hash<double>()(p.x) << 16) + hash<double>()(p.y);
+	}
+};
+
 
 class Line {
 private:
@@ -155,7 +167,8 @@ public:
 class Proc {
 private:
 	map<double, vector<Line>> preMap;
-	set<Point> pointSet;
+	unordered_set<Point, hashPoint> pointSet;
+	//set<Point> pointSet;
 	int num;
 	vector<Line> lineSet;
 	vector<Circle> circleSet;
