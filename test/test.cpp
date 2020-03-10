@@ -150,5 +150,14 @@ namespace test
 
 			Assert::AreEqual(2, result);
 		}
+		TEST_METHOD(TestMethod14)
+		{
+			Proc p;
+			Line l1(1, 0, 2, 0, 0);
+			Line l2(-1, 1, -1, 2, 1);
+			p.preProcLine(l1);
+			p.preProcLine(l2);
+			Assert::AreEqual(1, p.calcPoint());
+		}
 	};
 }

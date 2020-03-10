@@ -14,10 +14,7 @@ using namespace std;
 inline bool dEqual(double x, double y) {
 	double temp = 0;
 	bool result = false;
-	temp = x - y;
-	if (temp < 0) {
-		temp = -temp;
-	}
+	temp = abs(x - y);
 	if (temp < eps) {
 		result = true;
 	}

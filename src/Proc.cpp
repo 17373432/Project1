@@ -117,7 +117,6 @@ void Proc::lineAndLine() {
 		for (iterS = tempSet.begin(); iterS != tempSet.end(); iterS++) {
 			vector<Line>::iterator iterL;
 			Line l1 = *iterS;
-			//set or vector?
 			set<int> inteId;
 			for (iterL = lineSet.begin(); iterL != lineSet.end(); iterL++) {
 				Line l2 = *iterL;
@@ -126,12 +125,10 @@ void Proc::lineAndLine() {
 				if (iterI != inteId.end()) {
 					continue;
 				}
-
 				Point p = l1.withLine(l2);
-
 				//set<Point>::iterator iterP = pointSet.find(p);
 				unordered_set<Point, hashPoint>::iterator iterP = pointSet.find(p);
-				//找到就把点上的线全加进去
+				//if find, add all the id of lines intersected at this point to inteId
 				if (iterP != pointSet.end()) {
 					p = *iterP;
 					vector<int> temp = p.getLines();
@@ -142,14 +139,11 @@ void Proc::lineAndLine() {
 					p.addLine(l1.getId());
 					p.addLine(l2.getId());
 					pointSet.insert(p);
-
 				}
 			}
 		}
-
 		lineSet.insert(lineSet.end(), tempSet.begin(), tempSet.end());
 	}
-
 }
 
 void Proc::calcCircle() {
